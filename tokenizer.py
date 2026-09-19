@@ -67,5 +67,29 @@ def decode(ids):
     text = tokens.decode("utf-8", errors="replace")
     return text
 
+## encoding, given string -> list of ints (tokens), check docs.txt
+
+def encode(text): 
+    tokens = list(text.encode("utf-8"))
+
+    while len(tokens) >= 2:
+        stats = get_counts(tokens)
+
+        ## best rank is the highest possible value, (infinty)
+        best_pair = None
+        best_rank = float("inf")
+        for pair in merges: 
+            if pair in merges:
+                rank = merges[pair]
+                if rank < best_rank:
+                    best_rank = rank
+                    best_pair = pair
+            
+            if best_pair is None:
+                break   
+            new_token = merges[best_pair]
+            merge(tokens, best_pair, new_token)
+        return tokens
+
 
 

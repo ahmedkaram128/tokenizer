@@ -1,0 +1,39 @@
+"""
+BPE Merge Selection:
+
+During encoding, we look at all adjacent token pairs that currently exist
+in the text (stored in `stats`).
+
+We then check which of these pairs exist in `merges`. The `merges`
+dictionary contains the merge rules that were learned during BPE training.
+
+Example:
+    merges = {
+        (97, 98): 256,
+        (98, 99): 257,
+        (256, 99): 258
+    }
+
+The value in `merges` acts as the merge rank/priority in our simple
+implementation. A smaller rank means that the merge was learned earlier
+during training and therefore has higher priority.
+
+We start with:
+    best_pair = None
+    best_rank = infinity
+
+Then we check every pair currently present in `stats`.
+
+If the pair exists in `merges`, we get its rank. If its rank is smaller
+than the best rank we have found so far, it becomes the new best pair.
+
+After checking all pairs:
+- If best_pair is still None, no learned merge can be applied, so we stop.
+- Otherwise, we merge the best pair and repeat the process.
+
+In short:
+    stats  = which pairs currently exist
+    merges = which pairs the tokenizer learned to merge
+    rank   = priority of a learned merge
+    smaller rank = higher priority
+"""
