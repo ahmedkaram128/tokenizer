@@ -49,3 +49,23 @@ for i in range(num_merges):
   print(f"merging {pair} into a new token {idx}")
   ids = merge(ids, pair, idx)
   merges[pair] = idx
+
+
+vocab = {}
+
+for idx in range(256):
+    vocab[idx] = bytes([idx])
+
+for pair, new_token in merge.items():
+    first_byte = vocab[pair[0]]
+    second_byte = vocab[pair[1]]
+    new_merged_byte = first_byte + second_byte
+    vocab[new_token] = new_merged_byte
+
+def decode(ids):
+    tokens = b"".join(vocab[idx] for idx in ids)
+    text = tokens.decode("utf-8", errors="replace")
+    return text
+
+
+
